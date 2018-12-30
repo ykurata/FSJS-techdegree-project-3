@@ -85,13 +85,91 @@ $(document).ready(function() {
   });
 });
 
+
 // Display total cost of activities
 $('.activities').append('<div id="total"></div>')
 
-$('input[type=checkbox]').change(function() {
-  var total = 0;
-  $('input[type=checkbox]:checked').each(function() {
-    total += parseInt($(this).val());
+$(document).ready(function() {
+  $('input[type=checkbox]').change(function() {
+    var total = 0;
+    $('input[type=checkbox]:checked').each(function() {
+      total += parseInt($(this).val());
+    });
+    $('#total').html('Total: $' + total);
   });
-  $('#total').html('<p>Total: $' + total + '</p>');
+});
+
+
+// Select Credit Card by default
+function selectCredit() {
+  // Disable to select the "Select Payment Method"
+  $("select option[value='select_method']").attr('disabled', true);
+
+  $("select option[value='credit card']").attr("selected", true);
+  $("#credit-card").show();
+  $("#paypal").hide();
+  $("#bitcoin").hide();
+}
+selectCredit();
+
+
+// Show and hide payment info
+$(document).ready(function() {
+  $("#payment").change(function() {
+    if($(this).val() === "credit card") {
+      $("#credit-card").show();
+      $("#paypal").hide();
+      $("#bitcoin").hide();
+    } else if ($(this).val() === "paypal") {
+      $("#paypal").show();
+      $("#credit-card").hide();
+      $("#bitcoin").hide();
+    } else {
+      $("#bitcoin").show();
+      $("#credit-card").hide();
+      $("#paypal").hide();
+    }
+  });
+});
+
+
+// Form validation
+$(document).ready(function() {
+  $('button[type="submit"]').click(function(e) {
+    e.preventDefault();
+    const name = $('#name').val();
+    const email = $('#mail').val();
+    const activities = $('input[type="checkbox"]')
+    const creditNumber = $('#cc-num').val();
+    const zip = $('#zip').val();
+    const cvv = $('#cvv').val();
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
+    const creditCardRegex = /^[1-9][0-9]{12,15}$/;
+    const zipRegex = /^[0-9]{5}$/;
+    const cvvRegex = /^[0-9]{3}$/;
+
+    if (name.length === 0) {
+      $('#name').addClass('error');
+      $('label[for="name"]').addClass('error-tag');
+    }
+    if (email.length === 0 || !emailRegex.test(email)) {
+      $('#mail').addClass('error');
+      $('label[for="mail"]').addClass('error-tag');
+    }
+    if (!activities.is(':checked')) {
+      $('#activities').addClass('error-tag');
+    }
+    if (creditNumber.length === 0 || !creditCardRegex.test(creditNumber)) {
+      $('#cc-num').addClass('error');
+      $('label[for="cc-num"]').addClass('error-tag');
+    }
+    if (zip.length === 0 || !zipRegex.test(zip)) {
+      $('#zip').addClass('error');
+      $('label[for="zip"]').addClass('error-tag');
+    }
+    if (cvv.length === 0 || !cvvRegex.test(cvv)) {
+      $('#cvv').addClass('error');
+      $('label[for="cvv"]').addClass('error-tag');
+    }
+  });
 });
