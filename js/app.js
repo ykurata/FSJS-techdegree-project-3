@@ -143,12 +143,13 @@ $(document).ready(function() {
     const creditNumber = $('#cc-num').val();
     const zip = $('#zip').val();
     const cvv = $('#cvv').val();
+    const nameRegex = /^[a-zA-Z ]+$/;
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
     const creditCardRegex = /^[1-9][0-9]{12,15}$/;
     const zipRegex = /^[0-9]{5}$/;
     const cvvRegex = /^[0-9]{3}$/;
 
-    if (name.length === 0) {
+    if (name.length === 0 || !nameRegex.test(name)) {
       $('#name').addClass('error');
       $('label[for="name"]').addClass('error-tag');
     }
