@@ -135,6 +135,19 @@ button:hover {
 	margin-top: 1.25em;
 }
 
+/*Custom styles */
+.error {
+  border: 2px solid red;
+}
+
+.error-tag {
+  color : red;
+}
+
+.disabled {
+	color: lightgrey;
+}
+
 /* =================================
   Helper Classes
 ==================================== */
@@ -174,24 +187,10 @@ button:hover {
 	}
 	.col-3 {
 		width: 23%;
+
 	}
 	.col-6 {
 		width: 49%;
+
 	}
-}
-
-
-/* =================================
-  Custom styles
-==================================== */
-.valid {
-  border: 2px solid blue;
-}
-
-.error {
-  border: 2px solid red;
-}
-
-.error-tag {
-  color : red;
 }

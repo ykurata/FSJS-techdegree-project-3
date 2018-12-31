@@ -44,51 +44,54 @@ const node = $('input[name="node"]');
 $(document).ready(function() {
   $('input').on('click', function() {
     if (jsFrameworks.is(':checked')) {
-      $('input[name="express"]').prop('checked', false);
-      $('input[name="express"]').prop('disabled', true);
+      express.prop('checked', false);
+      express.prop('disabled', true);
+      express.parent().addClass('disabled');
     } else {
-      $('input[name="express"]').removeAttr('disabled');
+      express.removeAttr('disabled');
+      express.parent().removeClass('disabled');
     }
-  });
-});
-
-$(document).ready(function() {
-  $('input').on('click', function() {
     if (express.is(':checked')) {
-      $('input[name="js-frameworks"]').prop('checked', false);
-      $('input[name="js-frameworks"]').prop('disabled', true);
+      jsFrameworks.prop('checked', false);
+      jsFrameworks.prop('disabled', true);
+      jsFrameworks.parent().addClass('disabled');
     } else {
-      $('input[name="js-frameworks"]').removeAttr('disabled');
+      jsFrameworks.removeAttr('disabled');
+      jsFrameworks.parent().removeClass('disabled');
     }
-  });
-});
-
-$(document).ready(function() {
-  $('input').on('click', function() {
     if (jsLibs.is(':checked')) {
-      $('input[name="node"]').prop('checked', false);
-      $('input[name="node"]').prop('disabled', true);
+      node.prop('checked', false);
+      node.prop('disabled', true);
+      node.parent().addClass('disabled');
     } else {
-      $('input[name="node"]').removeAttr('disabled');
+      node.removeAttr('disabled');
+      node.parent().removeClass('disabled');
     }
-  });
-});
-
-$(document).ready(function() {
-  $('input').on('click', function() {
     if (node.is(':checked')) {
-      $('input[name="js-libs"]').prop('checked', false);
-      $('input[name="js-libs"]').prop('disabled', true);
+      jsLibs.prop('checked', false);
+      jsLibs.prop('disabled', true);
+      jsLibs.parent().addClass('disabled');
     } else {
-      $('input[name="js-libs"]').removeAttr('disabled');
+      jsLibs.removeAttr('disabled');
+      jsLibs.parent().removeClass('disabled');
     }
   });
 });
 
 
-// Display total cost of activities
+// Set div to display total cost
 $('.activities').append('<div id="total"></div>')
 
+// Set values to each activities
+$('input[name="all"]').attr('value', 200);
+$('input[name="js-frameworks"]').attr('value', 100);
+$('input[name="js-libs"]').attr('value', 100);
+$('input[name="express"]').attr('value', 100);
+$('input[name="node"]').attr('value', 100);
+$('input[name="build-tools"]').attr('value', 100);
+$('input[name="npm"]').attr('value', 100);
+
+// Display total cost of activities
 $(document).ready(function() {
   $('input[type=checkbox]').change(function() {
     var total = 0;
@@ -133,10 +136,14 @@ $(document).ready(function() {
 });
 
 
+// Set divs to display error messages
+$('#cc-num').after('<div class="cc-error"></div>');
+$('#zip').after('<div class="zip-error"></div>');
+$('#cvv').after('<div class="cvv-error"></div>');
+
 // Form validation
 $(document).ready(function() {
-  $('button[type="submit"]').click(function(e) {
-    e.preventDefault();
+  $('button[type="submit"]').click(function (e) {
     const name = $('#name').val();
     const email = $('#mail').val();
     const activities = $('input[type="checkbox"]')
@@ -144,33 +151,63 @@ $(document).ready(function() {
     const zip = $('#zip').val();
     const cvv = $('#cvv').val();
     const nameRegex = /^[a-zA-Z ]+$/;
-    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
-    const creditCardRegex = /^[1-9][0-9]{12,15}$/;
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    const creditCardRegex = /^[0-9]{13,16}$/;
     const zipRegex = /^[0-9]{5}$/;
     const cvvRegex = /^[0-9]{3}$/;
 
     if (name.length === 0 || !nameRegex.test(name)) {
       $('#name').addClass('error');
+      $('#name').attr("placeholder", "Please enter a name");
       $('label[for="name"]').addClass('error-tag');
+      return false;
+    } else {
+      $('#name').removeClass('error');
+      $('label[for="name"]').removeClass('error-tag');
     }
     if (email.length === 0 || !emailRegex.test(email)) {
       $('#mail').addClass('error');
+      $('#mail').attr("placeholder", "Please enter an email adress");
       $('label[for="mail"]').addClass('error-tag');
+      return false;
+    } else {
+      $('#mail').removeClass('error');
+      $('label[for="mail"]').removeClass('error-tag');
     }
     if (!activities.is(':checked')) {
       $('#activities').addClass('error-tag');
+      $('#total').html("please select at least one activity");
+      return false;
+    } else {
+      $('#activities').removeClass('error-tag');
     }
     if (creditNumber.length === 0 || !creditCardRegex.test(creditNumber)) {
       $('#cc-num').addClass('error');
       $('label[for="cc-num"]').addClass('error-tag');
+      $('.cc-error').html("Please enter a valid credit card number");
+      return false;
+    } else {
+      $('#cc-num').removeClass('error');
+      $('label[for="cc-num"]').removeClass('error-tag');
     }
     if (zip.length === 0 || !zipRegex.test(zip)) {
       $('#zip').addClass('error');
       $('label[for="zip"]').addClass('error-tag');
+      $('.zip-error').html("Please enter a valid zip code");
+      return false;
+    } else {
+      $('#zip').removeClass('error');
+      $('label[for="zip"]').removeClass('error-tag');
     }
     if (cvv.length === 0 || !cvvRegex.test(cvv)) {
       $('#cvv').addClass('error');
       $('label[for="cvv"]').addClass('error-tag');
+      $('.cvv-error').html("Please enter a valid cvv number");
+      return false;
+    } else {
+      $('#cvv').removeClass('error');
+      $('label[for="cvv"]').removeClass('error-tag');
     }
+    return true;
   });
 });
