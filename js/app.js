@@ -109,9 +109,9 @@ $(document).ready(function() {
 // Select Credit Card by default
 function selectCredit() {
   // Disable to select the "Select Payment Method"
-  $("select option[value='select_method']").attr('disabled', true);
+  $("select option[value='select_method']").hide();
 
-  $("select option[value='credit card']").attr("selected", true);
+  $("select option[value='credit card']").prop("selected", true);
   $("#credit-card").show();
   $("#paypal").hide();
   $("#bitcoin").hide();
@@ -146,7 +146,7 @@ $('#cvv').after('<div class="cvv-error"></div>');
 
 // Form validation
 $(document).ready(function() {
-  $('button[type="submit"]').click(function (e) {
+  $('form').on('submit', function(e) {
     const name = $('#name').val();
     const email = $('#mail').val();
     const activities = $('input[type="checkbox"]')
@@ -159,58 +159,47 @@ $(document).ready(function() {
     const zipRegex = /^[0-9]{5}$/;
     const cvvRegex = /^[0-9]{3}$/;
 
-    if (name.length === 0 || !nameRegex.test(name)) {
+    $('.errorMessage').remove();
+    $('.error').removeClass();
+    $('.error-tag').removeClass();
+
+    if (name.length < 1 || !nameRegex.test(name)) {
       $('#name').addClass('error');
       $('#name').attr("placeholder", "Please enter a name");
       $('label[for="name"]').addClass('error-tag');
-      return false;
-    } else {
-      $('#name').removeClass('error');
-      $('label[for="name"]').removeClass('error-tag');
+      e.preventDefault();
     }
-    if (email.length === 0 || !emailRegex.test(email)) {
+    if (email.length < 1 || !emailRegex.test(email)) {
       $('#mail').addClass('error');
       $('#mail').attr("placeholder", "Please enter an email adress");
       $('label[for="mail"]').addClass('error-tag');
-      return false;
-    } else {
-      $('#mail').removeClass('error');
-      $('label[for="mail"]').removeClass('error-tag');
+      e.preventDefault();
     }
     if (!activities.is(':checked')) {
       $('#activities').addClass('error-tag');
       $('#total').html("please select at least one activity");
-      return false;
-    } else {
-      $('#activities').removeClass('error-tag');
+      e.preventDefault();
     }
-    if (creditNumber.length === 0 || !creditCardRegex.test(creditNumber)) {
-      $('#cc-num').addClass('error');
-      $('label[for="cc-num"]').addClass('error-tag');
-      $('.cc-error').html("Please enter a valid credit card number");
-      return false;
-    } else {
-      $('#cc-num').removeClass('error');
-      $('label[for="cc-num"]').removeClass('error-tag');
+    // Validate only when credit card is selected
+    if ($('#payment option:selected').val() === 'credit card') {
+      if (creditNumber.length === 0 || !creditCardRegex.test(creditNumber)) {
+        $('#cc-num').addClass('error');
+        $('label[for="cc-num"]').addClass('error-tag');
+        $('.cc-error').html("Please enter a valid credit card number");
+        e.preventDefault();
+      }
+      if (zip.length === 0 || !zipRegex.test(zip)) {
+        $('#zip').addClass('error');
+        $('label[for="zip"]').addClass('error-tag');
+        $('.zip-error').html("Please enter a valid zip code");
+        e.preventDefault();
+      }
+      if (cvv.length === 0 || !cvvRegex.test(cvv)) {
+        $('#cvv').addClass('error');
+        $('label[for="cvv"]').addClass('error-tag');
+        $('.cvv-error').html("Please enter a valid cvv number");
+        e.preventDefault();
+      }
     }
-    if (zip.length === 0 || !zipRegex.test(zip)) {
-      $('#zip').addClass('error');
-      $('label[for="zip"]').addClass('error-tag');
-      $('.zip-error').html("Please enter a valid zip code");
-      return false;
-    } else {
-      $('#zip').removeClass('error');
-      $('label[for="zip"]').removeClass('error-tag');
-    }
-    if (cvv.length === 0 || !cvvRegex.test(cvv)) {
-      $('#cvv').addClass('error');
-      $('label[for="cvv"]').addClass('error-tag');
-      $('.cvv-error').html("Please enter a valid cvv number");
-      return false;
-    } else {
-      $('#cvv').removeClass('error');
-      $('label[for="cvv"]').removeClass('error-tag');
-    }
-    return true;
   });
 });
