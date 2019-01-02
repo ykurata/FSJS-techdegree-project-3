@@ -159,7 +159,6 @@ $(document).ready(function() {
     const zipRegex = /^[0-9]{5}$/;
     const cvvRegex = /^[0-9]{3}$/;
 
-    $('.errorMessage').remove();
     $('.error').removeClass();
     $('.error-tag').removeClass();
 
@@ -187,18 +186,24 @@ $(document).ready(function() {
         $('label[for="cc-num"]').addClass('error-tag');
         $('.cc-error').html("Please enter a valid credit card number");
         e.preventDefault();
+      } else {
+        $('.cc-error').hide();
       }
       if (zip.length === 0 || !zipRegex.test(zip)) {
         $('#zip').addClass('error');
         $('label[for="zip"]').addClass('error-tag');
         $('.zip-error').html("Please enter a valid zip code");
         e.preventDefault();
+      } else {
+        $('.zip-error').hide();
       }
       if (cvv.length === 0 || !cvvRegex.test(cvv)) {
         $('#cvv').addClass('error');
         $('label[for="cvv"]').addClass('error-tag');
         $('.cvv-error').html("Please enter a valid cvv number");
         e.preventDefault();
+      } else {
+        $('.cvv-error').hide();
       }
     }
   });
